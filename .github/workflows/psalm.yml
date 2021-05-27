@@ -10,15 +10,12 @@ defaults:
 jobs:
   psalm:
     name: Psalm
-    runs-on: Ubuntu-21.04
+    runs-on: Ubuntu-20.04
 
     steps:
       - name: Install system dependencies
         run: |
           echo "::group::apt-get update"
-          wget -O confluent_archive.key https://packages.confluent.io/deb/6.1/archive.key
-          sudo apt-key add confluent_archive.key
-          sudo add-apt-repository "deb [arch=amd64] https://packages.confluent.io/deb/6.1 stable main"
           sudo apt-get update
           echo "::endgroup::"
           echo "::group::install tools & libraries"
