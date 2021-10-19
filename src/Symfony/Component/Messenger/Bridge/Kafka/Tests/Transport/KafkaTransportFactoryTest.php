@@ -30,8 +30,7 @@ class KafkaTransportFactoryTest extends TestCase
     public function testSupports()
     {
         static::assertTrue($this->factory->supports('kafka://my-local-kafka:9092', []));
-        static::assertTrue($this->factory->supports('kafka+ssl://my-staging-kafka:9093', []));
-        static::assertTrue($this->factory->supports('kafka+ssl://prod-kafka-01:9093,kafka+ssl://prod-kafka-01:9093,kafka+ssl://prod-kafka-01:9093', []));
+        static::assertTrue($this->factory->supports('kafka://prod-kafka-01:9093,prod-kafka-01:9093,prod-kafka-01:9093', []));
     }
 
     public function testCreateTransport()

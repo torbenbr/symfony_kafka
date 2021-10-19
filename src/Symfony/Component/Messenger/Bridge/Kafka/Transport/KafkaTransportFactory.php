@@ -23,13 +23,6 @@ use Symfony\Component\Messenger\Transport\TransportInterface;
  */
 class KafkaTransportFactory implements TransportFactoryInterface
 {
-    private const DSN_PROTOCOLS = [
-        self::DSN_PROTOCOL_KAFKA,
-        self::DSN_PROTOCOL_KAFKA_SSL,
-    ];
-    private const DSN_PROTOCOL_KAFKA = 'kafka://';
-    private const DSN_PROTOCOL_KAFKA_SSL = 'kafka+ssl://';
-
     private $logger;
 
     public function __construct(?LoggerInterface $logger)
@@ -39,13 +32,7 @@ class KafkaTransportFactory implements TransportFactoryInterface
 
     public function supports(string $dsn, array $options): bool
     {
-        foreach (self::DSN_PROTOCOLS as $protocol) {
-            if (0 === strpos($dsn, $protocol)) {
-                return true;
-            }
-        }
-
-        return false;
+        return 0 === strpos($dsn, 'kafka://');
     }
 
     public function createTransport(string $dsn, array $options, SerializerInterface $serializer): TransportInterface
@@ -58,11 +45,6 @@ class KafkaTransportFactory implements TransportFactoryInterface
         $options = array_replace($parsedQuery, $options);
         $options['conf']['metadata.broker.list'] = $parsedUrl['host'];
 
-        return new KafkaTransport(
-            $this->logger,
-            $serializer,
-            new RdKafkaFactory(),
-            $options
-        );
+        return new KafkaTransport($this->logger, $serializer, new RdKafkaFactory(), $options);
     }
 }

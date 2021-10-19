@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-5.x
+5.4
 ---
 
  * Introduced the Kafka bridge.
