@@ -24,47 +24,47 @@ use Symfony\Component\Messenger\Transport\TransportInterface;
 class KafkaTransportTest extends TestCase
 {
     /** @var MockObject|LoggerInterface */
-    private $mockLogger;
+    private $logger;
 
     /** @var MockObject|SerializerInterface */
-    private $mockSerializer;
+    private $serializer;
 
     /** @var MockObject|KafkaConsumer */
-    private $mockRdKafkaConsumer;
+    private $rdKafkaConsumer;
 
     /** @var MockObject|KafkaProducer */
-    private $mockRdKafkaProducer;
+    private $rdKafkaProducer;
 
     /** @var MockObject|RdKafkaFactory */
-    private $mockRdKafkaFactory;
+    private $rdKafkaFactory;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->mockLogger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
-        $this->mockSerializer = $this->createMock(SerializerInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
 
         // RdKafka
-        $this->mockRdKafkaFactory = $this->createMock(RdKafkaFactory::class);
+        $this->rdKafkaFactory = $this->createMock(RdKafkaFactory::class);
 
-        $this->mockRdKafkaConsumer = $this->createMock(KafkaConsumer::class);
-        $this->mockRdKafkaFactory
+        $this->rdKafkaConsumer = $this->createMock(KafkaConsumer::class);
+        $this->rdKafkaFactory
             ->method('createConsumer')
-            ->willReturn($this->mockRdKafkaConsumer);
+            ->willReturn($this->rdKafkaConsumer);
 
-        $this->mockRdKafkaProducer = $this->createMock(KafkaProducer::class);
-        $this->mockRdKafkaFactory
+        $this->rdKafkaProducer = $this->createMock(KafkaProducer::class);
+        $this->rdKafkaFactory
             ->method('createProducer')
-            ->willReturn($this->mockRdKafkaProducer);
+            ->willReturn($this->rdKafkaProducer);
     }
 
     public function testConstruct()
     {
         $transport = new KafkaTransport(
-            $this->mockLogger,
-            $this->mockSerializer,
+            $this->logger,
+            $this->serializer,
             new RdKafkaFactory(),
             []
         );
@@ -74,7 +74,7 @@ class KafkaTransportTest extends TestCase
 
     public function testGet()
     {
-        $this->mockRdKafkaConsumer
+        $this->rdKafkaConsumer
             ->method('subscribe')
             ->willReturn(true);
 
@@ -90,11 +90,11 @@ class KafkaTransportTest extends TestCase
         $testMessage->offset = 0;
         $testMessage->timestamp = 1586861356;
 
-        $this->mockRdKafkaConsumer
+        $this->rdKafkaConsumer
             ->method('consume')
             ->willReturn($testMessage);
 
-        $this->mockSerializer->expects(static::once())
+        $this->serializer->expects(static::once())
             ->method('decode')
             ->with([
                 'body' => '{"data":null}',
@@ -111,9 +111,9 @@ class KafkaTransportTest extends TestCase
             ->willReturn(new Envelope(new TestMessage()));
 
         $transport = new KafkaTransport(
-            $this->mockLogger,
-            $this->mockSerializer,
-            $this->mockRdKafkaFactory,
+            $this->logger,
+            $this->serializer,
+            $this->rdKafkaFactory,
             [
                 'conf' => [],
                 'consumer' => [

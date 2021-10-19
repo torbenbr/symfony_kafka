@@ -24,7 +24,7 @@ class KafkaTransportIntegrationTest extends TestCase
     private $factory;
 
     /** @var SerializerInterface */
-    private $serializerMock;
+    private $serializer;
 
     /** @var string */
     private $testIteration = 0;
@@ -44,7 +44,7 @@ class KafkaTransportIntegrationTest extends TestCase
 
         $this->factory = new KafkaTransportFactory(new NullLogger());
 
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
 
         ++$this->testIteration;
 
@@ -79,9 +79,9 @@ class KafkaTransportIntegrationTest extends TestCase
         ];
 
         $envelope = Envelope::wrap(new TestMessage('my_test_data'), []);
-        $receiver = $this->factory->createTransport($this->dsn, $options, $this->serializerMock);
+        $receiver = $this->factory->createTransport($this->dsn, $options, $this->serializer);
 
-        $this->serializerMock->expects(static::once())
+        $this->serializer->expects(static::once())
             ->method('decode')
             ->willReturnCallback(
                 function (array $encodedEnvelope) use ($serializer) {

@@ -91,8 +91,13 @@ class KafkaReceiver implements ReceiverInterface
     {
         $consumer = $this->getConsumer();
 
-        /** @var KafkaMessageStamp $transportStamp */
+        /** @var ?KafkaMessageStamp $transportStamp */
         $transportStamp = $envelope->last(KafkaMessageStamp::class);
+
+        if(!$transportStamp) {
+            throw new TransportException('Kafka message could not be acked because KafkaMessageStamp is missing.');
+        }
+
         $message = $transportStamp->getMessage();
 
         if ($this->properties['commit_async']) {

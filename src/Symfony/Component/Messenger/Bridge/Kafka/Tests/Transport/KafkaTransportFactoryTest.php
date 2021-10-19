@@ -17,14 +17,14 @@ class KafkaTransportFactoryTest extends TestCase
     private $factory;
 
     /** @var SerializerInterface */
-    private $serializerMock;
+    private $serializer;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->factory = new KafkaTransportFactory(new NullLogger());
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
     }
 
     public function testSupports()
@@ -47,7 +47,7 @@ class KafkaTransportFactoryTest extends TestCase
                     'conf' => [],
                 ],
             ],
-            $this->serializerMock
+            $this->serializer
         );
 
         static::assertInstanceOf(TransportInterface::class, $transport);
@@ -58,7 +58,7 @@ class KafkaTransportFactoryTest extends TestCase
         $transport = $this->factory->createTransport(
             'kafka://kafka1,kafka2:9092?consumer[topics][0]=test&consumer[receive_timeout]=10000',
             [],
-            $this->serializerMock
+            $this->serializer
         );
 
         static::assertInstanceOf(TransportInterface::class, $transport);
