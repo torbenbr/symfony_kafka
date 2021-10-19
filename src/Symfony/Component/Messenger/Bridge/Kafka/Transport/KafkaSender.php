@@ -59,12 +59,12 @@ class KafkaSender implements SenderInterface
         );
 
         $code = \RD_KAFKA_RESP_ERR_NO_ERROR;
-        for ($flushRetries = 0; $flushRetries <= $this->properties['flush_retries']; ++$flushRetries) {
-            $code = $producer->flush($this->properties['flush_retries']);
+        for ($flushTry = 0; $flushTry <= $this->properties['flush_retries']; ++$flushTry) {
+            $code = $producer->flush($this->properties['flush_timeout']);
             if (\RD_KAFKA_RESP_ERR_NO_ERROR === $code) {
-                $this->logger->info(sprintf('Kafka message sent%s', \array_key_exists('key', $payload) ? ' with key '.$payload['key'] : ''));
                 break;
             }
+            $this->logger->info(sprintf('Kafka flush #%s didn\'t succeed.', $flushTry));
             sleep(1);
         }
 
