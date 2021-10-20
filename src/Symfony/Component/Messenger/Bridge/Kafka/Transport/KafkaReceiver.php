@@ -94,7 +94,7 @@ class KafkaReceiver implements ReceiverInterface
         /** @var ?KafkaMessageStamp $transportStamp */
         $transportStamp = $envelope->last(KafkaMessageStamp::class);
 
-        if(!$transportStamp) {
+        if (!$transportStamp) {
             throw new TransportException('Kafka message could not be acked because KafkaMessageStamp is missing.');
         }
 
