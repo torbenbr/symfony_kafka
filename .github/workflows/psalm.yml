@@ -20,8 +20,8 @@ jobs:
           sudo apt install -y build-essential libssl-dev libzstd-dev libcurl4-openssl-dev
           echo "::endgroup::"
           echo "::group::install tools & libraries"
-          wget https://github.com/edenhill/librdkafka/archive/refs/tags/v1.8.2.tar.gz -o librdkafka.tar.gz
-          tar -xf librdkafka.tar.gz
+          wget https://github.com/edenhill/librdkafka/archive/refs/tags/v1.8.2.tar.gz
+          tar -xf v1.8.2.tar.gz
           cd librdkafka-1.8.2/
           ./configure --install-deps
           make
