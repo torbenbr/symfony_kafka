@@ -23,6 +23,14 @@ cache:
 
 before_install:
     - |
+      # Enable extra ppa
+      wget -O confluent_archive.key https://packages.confluent.io/deb/6.0/archive.key
+      sudo apt-key add confluent_archive.key
+      sudo add-apt-repository "deb [arch=amd64] https://packages.confluent.io/deb/6.0 stable main"
+      sudo apt update
+      sudo apt install -y librdkafka1 librdkafka-dev
+
+    - |
       # General configuration
       set -e
       stty cols 120
@@ -109,6 +117,8 @@ before_install:
           if [[ $PHP != 8.* ]]; then
               tfold ext.zookeeper tpecl zookeeper-0.7.2 zookeeper.so $INI
           fi
+
+          tfold ext.rdkafka tpecl rdkafka-5.0.0 rdkafka.so $INI
       done
 
 install:

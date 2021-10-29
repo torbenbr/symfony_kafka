@@ -13,11 +13,23 @@ jobs:
     runs-on: Ubuntu-20.04
 
     steps:
-      - name: Setup PHP
+      - name: Install system dependencies
+        run: |
+          echo "::group::apt-get update"
+          wget -O confluent_archive.key https://packages.confluent.io/deb/6.1/archive.key
+          sudo apt-key add confluent_archive.key
+          sudo add-apt-repository "deb [arch=amd64] https://packages.confluent.io/deb/6.1 stable main"
+          sudo apt-get update
+          echo "::endgroup::"
+          echo "::group::install tools & libraries"
+          sudo apt-get install librdkafka1 librdkafka-dev
+          echo "::endgroup::"
+
+      - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.0'
-          extensions: "json,couchbase,memcached,mongodb,redis,xsl,ldap,dom"
+          extensions: "json,couchbase,memcached,mongodb,redis,xsl,ldap,dom,rdkafka"
           ini-values: "memory_limit=-1"
           coverage: none
 
