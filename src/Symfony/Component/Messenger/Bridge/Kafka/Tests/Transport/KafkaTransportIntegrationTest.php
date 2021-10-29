@@ -72,7 +72,7 @@ class KafkaTransportIntegrationTest extends TestCase
             'consumer' => [
                 'topics' => [$topicName],
                 'commit_async' => false,
-                'receive_timeout' => 10000,
+                'receive_timeout' => 60000,
                 'conf' => [
                     'group.id' => 'messenger_test'.$topicName,
                     'enable.auto.offset.store' => 'false',
@@ -170,7 +170,7 @@ class KafkaTransportIntegrationTest extends TestCase
                 'consumer' => [
                     'topics' => [$topicNameA, $topicNameB],
                     'commit_async' => false,
-                    'receive_timeout' => 10000,
+                    'receive_timeout' => 60000,
                     'conf' => [
                         'group.id' => 'messenger_test_'.$topicName,
                         'enable.auto.offset.store' => 'false',
