@@ -84,8 +84,7 @@ class KafkaTransportTest extends TestCase
     public function testGet()
     {
         $this->rdKafkaConsumer
-            ->method('subscribe')
-            ->willReturn(true);
+            ->method('subscribe');
 
         $testMessage = new Message();
         $testMessage->err = \RD_KAFKA_RESP_ERR_NO_ERROR;
