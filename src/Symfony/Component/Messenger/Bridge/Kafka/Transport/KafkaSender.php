@@ -14,6 +14,7 @@ namespace Symfony\Component\Messenger\Bridge\Kafka\Transport;
 use Psr\Log\LoggerInterface;
 use RdKafka\Conf as KafkaConf;
 use RdKafka\Producer as KafkaProducer;
+use RdKafka\ProducerTopic as KafkaProducerTopic;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\TransportException;
 use Symfony\Component\Messenger\Transport\Sender\SenderInterface;
@@ -45,6 +46,7 @@ class KafkaSender implements SenderInterface
     public function send(Envelope $envelope): Envelope
     {
         $producer = $this->getProducer();
+        /** @var KafkaProducerTopic $topic */
         $topic = $producer->newTopic($this->properties['topic_name']);
 
         $payload = $this->serializer->encode($envelope);
